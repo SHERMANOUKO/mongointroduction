@@ -1,0 +1,201 @@
+Create a brand new database – use <db name> 
+Create new collection – db.createCollection(“collection name”)
+Check database you are in – db
+Show databases – show dbs
+Show collections – show collections
+Drop database – db.dropDatabase()
+Use db – use <db name>
+Show collections – show <collection name>
+
+Insert data / documents/ rows / columns
+
+db.posts.insert({
+	title : 'Post One',
+	body : 'Body of post one',
+	category : 'News',
+	likes : 4,
+	tags : ['news', 'events'],
+	user : {
+		name : 'John Doe',
+		status : 'Author'
+	},
+	date : Date()
+})
+
+Insert more than one row at a time
+
+db.posts.insert(
+	[
+		{
+			title : 'Post Two',
+			body : 'Body of post two',
+			category : 'Technology',
+			likes : 4,
+			tags : ['software', 'tech'],
+			user : {
+				name : 'John Doe',
+				status : 'Author'
+			},
+			date : Date()
+		},
+		{
+			title : 'Post Three',
+			body : 'Body of post three',
+			category : 'News',
+			likes : 4,
+			tags : ['news', 'events'],
+			user : {
+				name : 'John Doe',
+				status : 'Author'
+			},
+			date : Date()
+		},
+		{
+			title : 'Post Four',
+			body : 'Body of post four',
+			category : 'Entertainment',
+			likes : 4,
+			tags : ['artists', 'entertainment'],
+			user : {
+				name : 'John Doe',
+				status : 'Author'
+			},
+			date : Date()
+		}
+	]
+)
+
+Query databases
+
+db.posts.find()
+
+Query pretty for readability
+db.posts.find().pretty()
+
+Narrow down find by condition
+db.posts.find({category: ‘News’})
+
+Sort ascending
+db.posts.find().sort({ title: 1}).pretty()
+
+Sort descending
+db.posts.find().sort({ title : -1}).pretty()
+
+Count
+db.posts.find({category: ‘News’}).count()
+
+Limit
+db.posts.find().limit(2)
+
+Sort and limit
+db.posts.find().sort({ title : -1}).limit(2).pretty()
+
+foreach
+db.posts.find().forEach(function(doc) {print(‘Blog post title:  ‘ + doc.title)})
+
+find one specific row
+db.posts.findOne({category : ‘News’})
+
+update all fields
+db.posts.update(
+	{ title : 'Post One'},
+	{
+		title : 'Post One New',
+		body : 'Body of post one new',
+		category : 'News',
+		likes : 4,
+		tags : ['news', 'events'],
+		user : {
+			name : 'John Doe',
+			status : 'Author'
+		},
+		date : Date()
+	}
+)
+
+update all fields or create
+db.posts.update(
+	{ title : 'Post One'},
+	{
+		title : 'Post One New',
+		body : 'Body of post one new',
+		category : 'News',
+		likes : 4,
+		tags : ['news', 'events'],
+		user : {
+			name : 'John Doe',
+			status : 'Author'
+		},
+		date : Date()
+	},
+	{ upsert: true}
+)
+
+
+update some fields only
+db.posts.update(
+	{ title : 'Post Two'},
+	{
+		$set : {
+			title : 'Post Two New',
+			date : Date()
+		}
+	}
+)
+
+increment property
+db.posts.update({ title : ‘Post Four’}, { $inc : { likes : 2 }})
+rename a field
+db.posts.update({ title : ‘Post Four’}, { $rename : { likes : ‘views’  }})
+
+delete a field
+db.posts.remove({ title: ‘Post Four’})
+
+subdocuments
+db.posts.update(
+	{ title : 'Post Three'},
+	{
+		$set : {
+			comments : [
+				{
+					user : 'Mary Williams',
+					body : 'Comment one',
+					date : Date()	
+				},
+				{
+					user : 'Mary Jane',
+					body : 'Comment two',
+					date : Date()	
+				}
+			]
+		}
+	}
+)
+
+filter with elemMatch
+
+db.posts.find({
+	comments : {
+		$elemMatch : {
+			user : 'Mary Williams'
+		}
+	}
+}).pretty()
+
+add index
+db.posts.createIndex({ title : 'text' })
+
+search
+db.posts.find({
+	$text : {
+		$search : "\"Post O\""
+	}
+})
+
+
+
+greater than , less than, equals
+db.posts.find({ likes : { $gt: 3 }})
+db.posts.find({ likes : { $gt:e 3 }})
+db.posts.find({ likes : { $lt: 3 }})
+db.posts.find({ likes : { $lte: 3 }})
